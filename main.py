@@ -16,7 +16,6 @@ for col in req_col:
 
 df = df.dropna(subset=req_col)
 
-# Drop (0, 0) null-island outliers and non-positive prices
 df = df[
     (df['price'] > 0) &
     (df['latitude'].abs() > 1) &
@@ -24,6 +23,7 @@ df = df[
 ]
 
 app = Dash(__name__)
+server = app.server
 
 max_price_val = int(df['price'].max())
 slider_max = ((max_price_val + 99) // 100) * 100
@@ -88,7 +88,6 @@ def update_plot(min_nights, price_range):
             title='Geographic Coordinate Distribution (No Map Tiles)'
         )
         fig.update_traces(marker={'size': 7, 'opacity': 0.8})
-        # Lock aspect ratio so coordinates aren't distorted
         fig.update_yaxes(scaleanchor='x', scaleratio=1)
 
     return fig, f"Properties shown: {len(filtered_df):,}"
